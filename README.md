@@ -72,3 +72,32 @@ General .NET OSS discussions: [.NET Foundation Discussions](https://github.com/d
 ## License
 
 .NET (including the runtime repo) is licensed under the [MIT](LICENSE.TXT) license.
+
+
+
+сборка
+fork сначала
+git clone 
+git remote add upstream https://github.com/dotnet/runtime.git
+git clean -xdf :: удаляются папки artifact и .dotnet, если не удаляются использую task manager
+git pull upstream main & git push origin main :: подкачиваю исходник и передаю в свой repo
+:: Build Debug libraries on top of Release runtime:
+build.cmd clr+libs -rc Release
+:: Performing the above is usually only needed once in a day, or when you pull down significant new changes.
+
+вариант билд все
+./build.cmd -rc Release
+
+:: If you use Visual Studio, you might open System.Collections.Concurrent.sln here.
+build.cmd -vs System.Collections.Concurrent
+
+:: Switch to working on a given library (System.Collections.Concurrent in this case)
+cd src\libraries\System.Collections.Concurrent
+
+:: Change to test directory
+cd tests
+
+:: Then inner loop build / test
+:: (If using Visual Studio, you might run tests inside it instead)
+pushd ..\src & dotnet build & popd & dotnet build /t:test
+
